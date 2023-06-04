@@ -123,6 +123,10 @@ public enum PageSheet {
     override func viewWillDisappear(_ animated: Bool) {
       super.viewWillDisappear(animated)
 
+      // NOTE: Fixes iOS 16 keyboard+spacer bug in sheet.
+      view.endEditing(true)
+      view.layoutIfNeeded()
+      
       // NOTE: Fixes an issue with largestUndimmedDetentIdentifier perpetually dimming buttons.
       self.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
     }
