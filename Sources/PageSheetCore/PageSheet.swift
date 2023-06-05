@@ -128,7 +128,7 @@ public enum PageSheet {
       view.layoutIfNeeded()
       
       // NOTE: Fixes an issue with largestUndimmedDetentIdentifier perpetually dimming buttons.
-      self.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
+      // self.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
     }
 
     // MARK: UISheetPresentationControllerDelegate
@@ -167,14 +167,14 @@ public enum PageSheet {
         controller.rootView = content
 
         // NOTE: Fixes safe area flickering when we throw the view up and down.
-        controller.view.invalidateIntrinsicContentSize()
+        // controller.view.invalidateIntrinsicContentSize()
 
         // NOTE: Fixes an issue with largestUndimmedDetentIdentifier perpetually dimming buttons.
-        if configuration.largestUndimmedDetentIdentifier != nil {
-          controller.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
-        } else {
-          controller.parent?.presentingViewController?.view.tintAdjustmentMode = .automatic
-        }
+        // if configuration.largestUndimmedDetentIdentifier != nil {
+        //   controller.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
+        // } else {
+        //   controller.parent?.presentingViewController?.view.tintAdjustmentMode = .automatic
+        // }
       }
     }
   }
