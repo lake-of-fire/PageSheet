@@ -192,9 +192,9 @@ public enum PageSheet {
     }
 
     func updateUIViewController(_ controller: HostingController<Content>, context _: Context) {
+      controller.rootView = content
       if controller.configuration != configuration, configuration != .default {
         controller.configuration = configuration
-        controller.rootView = content
 
         // NOTE: Fixes safe area flickering when we throw the view up and down.
         controller.view.invalidateIntrinsicContentSize()
