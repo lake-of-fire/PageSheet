@@ -84,9 +84,9 @@ public enum PageSheet {
         var configuration: Configuration = .default {
             didSet {
                 if let sheet = self.sheetPresentationController {
-                    if sheet.delegate == nil {
+//                    if sheet.delegate == nil {
                         sheet.delegate = self
-                    }
+//                    }
                     
                     let config = self.configuration
                     sheet.animateChanges {
