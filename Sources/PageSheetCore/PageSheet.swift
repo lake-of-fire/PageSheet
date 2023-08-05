@@ -23,7 +23,7 @@ public enum PageSheet {
     var prefersGrabberVisible: Bool = false
     var detents: [Detent] = [.large()]
     var largestUndimmedDetentIdentifier: Detent.Identifier? = nil
-    var selectedDetentIdentifier: Detent.Identifier? = nil
+    var selectedDetentIdentifier: Detent.Identifier = nil
     var prefersEdgeAttachedInCompactHeight: Bool = false
     var widthFollowsPreferredContentSizeWhenEdgeAttached: Bool = false
     var prefersScrollingExpandsWhenScrolledToEdge: Bool = true
@@ -150,7 +150,7 @@ public enum PageSheet {
     var selectedDetent: Detent.Identifier?
 
     @State
-    private var selectedDetentIdentifier: Detent.Identifier?
+    private var selectedDetentIdentifier: Detent.Identifier
 
     let content: Content
 
@@ -246,7 +246,7 @@ extension PageSheet {
     }
 
     public struct SelectedDetentIdentifier: AutomaticPreferenceKey {
-      public static var defaultValue: Detent.Identifier? = Configuration.default
+      public static var defaultValue: Detent.Identifier = Configuration.default
         .selectedDetentIdentifier
     }
 
