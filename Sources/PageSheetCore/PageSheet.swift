@@ -23,7 +23,7 @@ public enum PageSheet {
     var prefersGrabberVisible: Bool = false
     var detents: [Detent] = [.large()]
     var largestUndimmedDetentIdentifier: Detent.Identifier? = nil
-    var selectedDetentIdentifier: Detent.Identifier = nil
+    var selectedDetentIdentifier: Detent.Identifier = .large
     var prefersEdgeAttachedInCompactHeight: Bool = false
     var widthFollowsPreferredContentSizeWhenEdgeAttached: Bool = false
     var prefersScrollingExpandsWhenScrolledToEdge: Bool = true
