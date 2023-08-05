@@ -1,3 +1,4 @@
+#if os(iOS)
 import SwiftUI
 
 extension View {
@@ -189,7 +190,7 @@ extension View {
   ///   - id: A ``PageSheet/Detent`` Identifier value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
   @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
-  @inlinable public func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View {
+  @inlinable public func selectedDetent(id identifier: PageSheet.Detent.Identifier) -> some View {
     self.sheetPreference(.selectedDetent(id: identifier))
   }
 
@@ -278,3 +279,4 @@ extension View {
     self.modifier(SheetPreferenceViewModifier(preference))
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import SwiftUI
 
 /// A SwiftUI wrapper view for presentation controllers that manages the appearance and behavior of a sheet.
@@ -26,3 +27,4 @@ public struct PageSheetView<Content>: View where Content: View {
     PageSheet.ConfiguredHostingView(content: content())
   }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(iOS)
 import SwiftUI
 
 private struct SelectedDetentIdentifier: EnvironmentKey {
@@ -19,3 +20,4 @@ extension EnvironmentValues {
     self[SelectedDetentIdentifier.self]
   }
 }
+#endif
