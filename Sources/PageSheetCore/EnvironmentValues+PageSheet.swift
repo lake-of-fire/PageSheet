@@ -1,7 +1,7 @@
 import SwiftUI
 
 private struct SelectedDetentIdentifier: EnvironmentKey {
-  static let defaultValue: PageSheet.Detent.Identifier = .large()
+  static let defaultValue: PageSheet.Detent.Identifier = .large
 }
 
 extension EnvironmentValues {
