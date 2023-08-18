@@ -22,7 +22,7 @@ public enum PageSheet {
     
     fileprivate struct Configuration: Equatable {
         var prefersGrabberVisible: Bool = false
-        var detents: [Detent] = [.large()]
+        var detents: [Detent] = []
         var largestUndimmedDetentIdentifier: Detent.Identifier? = nil
         var selectedDetentIdentifier: Detent.Identifier = .large
         var prefersEdgeAttachedInCompactHeight: Bool = false
@@ -30,7 +30,15 @@ public enum PageSheet {
         var prefersScrollingExpandsWhenScrolledToEdge: Bool = true
         var preferredCornerRadius: CGFloat? = nil
         
-        static var `default`: Self { .init() }
+        static var `default`: Self {
+            get {
+                if let lastUsed = Self.lastUsed {
+                    return lastUsed
+                }
+                return .init()
+            }
+        }
+        static var lastUsed: Self?
     }
     
     // MARK: - ConfiguredHostingView
@@ -44,29 +52,31 @@ public enum PageSheet {
         var body: some View {
             HostingView(configuration: $configuration, selectedDetent: $selectedDetent, content: content)
                 .onChange(of: selectedDetent) { newValue in
-                    self.configuration.selectedDetentIdentifier = newValue
+                    guard !configuration.detents.isEmpty else { return }
+                    configuration.selectedDetentIdentifier = newValue
                 }
                 .onPreferenceChange(Preference.SelectedDetentIdentifier.self) { newValue in
-                    self.selectedDetent = newValue
+                    guard !configuration.detents.isEmpty else { return }
+                    selectedDetent = newValue
                 }
                 .onPreferenceChange(Preference.GrabberVisible.self) { newValue in
-                    self.configuration.prefersGrabberVisible = newValue
+                    configuration.prefersGrabberVisible = newValue
                 }
                 .onPreferenceChange(Preference.Detents.self) { newValue in
-                    self.configuration.detents = newValue
+                    configuration.detents = newValue
                 }
                 .onPreferenceChange(Preference.LargestUndimmedDetentIdentifier.self) { newValue in
-                    self.configuration.largestUndimmedDetentIdentifier = newValue
+                    configuration.largestUndimmedDetentIdentifier = newValue
                 }
                 .onPreferenceChange(Preference.EdgeAttachedInCompactHeight.self) { newValue in
-                    self.configuration.prefersEdgeAttachedInCompactHeight = newValue
+                    configuration.prefersEdgeAttachedInCompactHeight = newValue
                 }
                 .onPreferenceChange(Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self) {
                     newValue in
-                    self.configuration.widthFollowsPreferredContentSizeWhenEdgeAttached = newValue
+                    configuration.widthFollowsPreferredContentSizeWhenEdgeAttached = newValue
                 }
                 .onPreferenceChange(Preference.ScrollingExpandsWhenScrolledToEdge.self) { newValue in
-                    self.configuration.prefersScrollingExpandsWhenScrolledToEdge = newValue
+                    configuration.prefersScrollingExpandsWhenScrolledToEdge = newValue
                 }
                 .onPreferenceChange(Preference.CornerRadius.self) { newValue in
                     self.configuration.preferredCornerRadius = newValue
@@ -89,6 +99,7 @@ public enum PageSheet {
 //                    }
                     
                     let config = self.configuration
+                    
                     sheet.animateChanges {
                         sheet.prefersGrabberVisible = config.prefersGrabberVisible
                         sheet.detents = config.detents
@@ -156,8 +167,9 @@ public enum PageSheet {
         
         func updateUIViewController(_ controller: HostingController<Content>, context: Context) {
             controller.rootView = content
-            if controller.configuration != configuration, configuration != .default {
+            if controller.configuration != configuration, !configuration.detents.isEmpty, configuration != .default {
                 controller.configuration = configuration
+                Configuration.lastUsed = configuration
                 
                 // NOTE: Fixes safe area flickering when we throw the view up and down.
                 // controller.view.invalidateIntrinsicContentSize()
@@ -168,6 +180,8 @@ public enum PageSheet {
                 // } else {
                 //   controller.parent?.presentingViewController?.view.tintAdjustmentMode = .automatic
                 // }
+            } else if let lastUsed = Configuration.lastUsed {
+                controller.configuration = lastUsed
             }
         }
     }
@@ -182,9 +196,7 @@ extension PageSheet {
         // MARK: Presentation
         
         struct BooleanPresentation<SheetContent: View>: ViewModifier {
-            
-            @Binding
-            var isPresented: Bool
+            @Binding var isPresented: Bool
             
             let onDismiss: (() -> Void)?
             let content: () -> SheetContent
@@ -201,9 +213,7 @@ extension PageSheet {
         // MARK: ItemPresentation
         
         struct ItemPresentation<Item: Identifiable, SheetContent: View>: ViewModifier {
-            
-            @Binding
-            var item: Item?
+            @Binding var item: Item?
             
             let onDismiss: (() -> Void)?
             let content: (Item) -> SheetContent
